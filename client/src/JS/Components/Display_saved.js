@@ -4,29 +4,49 @@ var ReactDOM = require('react-dom');
 
 
 
-var Box_display = React.createClass({  
+var Display_saved = React.createClass({  
 	 
+getInitialState:function(){
 
-addfav:function()
+  return {
+    message:this.props.Id_temp
+  };
+},
+
+onformSubmit:function()
+  {
+                                
+  this.props.delhand_ref({message:this.props.arr.imdbID});
+},
+
+
+delfav:function()
 {
+
+	console.log("hello try9");
 var movieArray=this.props.arr;
 console.log(movieArray);
+
+link="http://localhost:8080/users/delmovies?id="+this.props.arr.imdbID;
 $.ajax({
 
-url:"http://localhost:8080/users/add",
-type:'POST',
+url:link,
+type:'DELETE',
 data:movieArray,
 			success:function(data){ 
-				console.log(data);
-
-				alert(this.props.arr.Type+" "+this.props.arr.Title+" successfully added")
-			
-				
+				 
+				console.log("Hello Success try")
+                
+				alert(this.props.arr.Type+" "+this.props.arr.Title+" successfully deleted")
+                this.onformSubmit()
+               
+              
 			}.bind(this),
 
 			error: function(err)
 			{
-				console.log(err);
+				console.log("Hello Error")
+				console.log(err)
 			}.bind(this)
 		}); 
 
@@ -60,7 +80,7 @@ link="http://www.imdb.com/title/"+this.props.arr.imdbID;
 				<br></br>
 				
 				<a className="btn btn-danger  pull-right"  target="_blank" href={link} >SEE ON IMDB</a>
-				<button type="button" className="btn btn-primary  pull-left"  onClick={this.addfav}  >ADD Favourite</button>
+				<button type="button" className="btn btn-primary  pull-left"  onClick={this.delfav}  >Delete</button>
 				</div>
 				</div>
 				</div>
@@ -79,4 +99,4 @@ link="http://www.imdb.com/title/"+this.props.arr.imdbID;
 
 		}
 	});
-	module.exports=Box_display;
+module.exports=Display_saved;

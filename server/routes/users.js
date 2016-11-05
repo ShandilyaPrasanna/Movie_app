@@ -84,7 +84,7 @@ mongoose.model('MovieDetails').find({}, function(err, movies){
 
 });
 
-});router.route("/delmovies").delete(function(req,res){    var delid  = req.query.id;Movie.find({'idkey':delid}, function(err, movie){
+});router.route("/delmovies").delete(function(req,res){    var delid  = req.query.id;Movie.find({'imdbID':delid}, function(err, movie){
 
        if (err) {
 
@@ -97,8 +97,8 @@ mongoose.model('MovieDetails').find({}, function(err, movies){
                else {
 
                  //console.log(movies);
-
-                 Movie.remove({'idkey':delid},function (err, data){
+                
+                 Movie.remove({'imdbID':delid},function (err, data){
 
 
 
