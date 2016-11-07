@@ -56,7 +56,7 @@ var MainComp = React.createClass({
 
 			)
 
-		}
+	}
 
-	});
-	module.exports=MainComp;
+});
+module.exports=MainComp;

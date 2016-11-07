@@ -12,104 +12,104 @@ console.log("1st route");
 
 router.route("/add").post(function(req,res){
 
-if(req.body){
-console.log(req.body);
- var movieVar  = new Movie(req.body);  movieVar.save(function(err){
+  if(req.body){
+    console.log(req.body);
+    var movieVar  = new Movie(req.body);  movieVar.save(function(err){
 
-   if (err){
+     if (err){
 
-     res.send(err);
+       res.send(err);
 
-   }
+     }
 
-   else{
+     else{
 
-     res.send("Movie Instered");
+       res.send("Movie Instered");
 
-   }
+     }
 
- });
+   });
 
-}
+  }
 
 });
 
 router.route("/getmovies").get(function(req,res){
 
-mongoose.model('MovieDetails').find({}, function(err, movies){
+  mongoose.model('MovieDetails').find({}, function(err, movies){
 
-       if (err) {
+   if (err) {
 
-                   res.send(err);
+     res.send(err);
 
-               }
+   }
 
-               else {
+   else {
 
-                 res.send(movies);
+     res.send(movies);
 
-             }
+   }
 
-});
+ });
 
 });router.route("/update").put(function(req,res){    var upid  = req.query.id;
 
-   var uptitle = req.query.title;Movie.find({'idkey':upid}, function(err, movie){
+ var uptitle = req.query.title;Movie.find({'imdbID':upid}, function(err, movie){
 
-       if (err) {
+   if (err) {
 
-         console.log(err);
+     console.log(err);
 
-                   res.send(err);
+     res.send(err);
 
-               }
+   }
 
-               else {
+   else {
 
-               Movie.update({'idkey':upid},{"$set":{'Title':uptitle}},function(err){
+     Movie.update({'imdbID':upid},{"$set":{'Title':uptitle}},function(err){
 
-                 if (err){
+       if (err){
 
-                   res.send(err);
+         res.send(err);
 
-                 }
+       }
 
-                 else{
+       else{
 
-                   res.send("Movie updated with response \n"+movie);
+         res.send("Movie updated with response \n"+movie);
 
-                 }
+       }
 
-               });              }
+     });              }
 
-});
+   });
 
 });router.route("/delmovies").delete(function(req,res){    var delid  = req.query.id;Movie.find({'imdbID':delid}, function(err, movie){
 
-       if (err) {
+ if (err) {
 
-         console.log(err);
+   console.log(err);
 
-                   res.send(err);
+   res.send(err);
 
-               }
+ }
 
-               else {
+ else {
 
                  //console.log(movies);
-                
+                 
                  Movie.remove({'imdbID':delid},function (err, data){
 
 
 
                    if (err) {                      res.send(err);
 
-               } else {                  res.send(data);
+                   } else {                  res.send(data);
 
-               }
+                   }
 
                  });              }
 
-});
+               });
 
 });module.exports = router;

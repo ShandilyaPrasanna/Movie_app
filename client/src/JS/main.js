@@ -23,15 +23,15 @@ var MainComponents=React.createClass({
 		}
 	})
 
-		ReactDOM.render(
-                       <Router history={hashHistory}>
-                       <Route path="/" component={MainComponents}> 
-                       <IndexRoute path="/MainComp" component={MainComp}/>  
-                       <Route path="/MainComp" component={MainComp}/>
-                       <Route path="/Favourite" component={Favourite}/>
-                       <Route path="/about" component={About}/>
-                       
-                       </Route>
-      
-</Router>,
-		document.getElementById('app'));
+	ReactDOM.render(
+	<Router history={hashHistory}>
+	<Route path="/" component={MainComponents}> 
+	<IndexRoute path="/MainComp" component={MainComp}/>  
+	<Route path="/MainComp" component={MainComp}/>
+	<Route path="/Favourite" component={Favourite}/>
+	<Route path="/about" component={About}/>
+	
+	</Route>
+	
+	</Router>,
+	document.getElementById('app'));

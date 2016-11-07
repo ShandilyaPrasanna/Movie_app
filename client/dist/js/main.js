@@ -26158,22 +26158,22 @@ var ReactDOM = require('react-dom');
 
 
 var Box_display = React.createClass({displayName: "Box_display",  
-	 
+	
 
-addfav:function()
-{
-var movieArray=this.props.arr;
-console.log(movieArray);
-$.ajax({
+	addfav:function()
+	{
+		var movieArray=this.props.arr;
+		console.log(movieArray);
+		$.ajax({
 
-url:"http://localhost:8080/users/add",
-type:'POST',
-data:movieArray,
+			url:"http://localhost:8080/users/add",
+			type:'POST',
+			data:movieArray,
 			success:function(data){ 
 				console.log(data);
 
 				alert(this.props.arr.Type+" "+this.props.arr.Title+" successfully added")
-			
+				
 				
 			}.bind(this),
 
@@ -26188,42 +26188,42 @@ data:movieArray,
 
 
 
-},
+	},
 
-render: function(){ 
-link="http://www.imdb.com/title/"+this.props.arr.imdbID;
+	render: function(){ 
+		link="http://www.imdb.com/title/"+this.props.arr.imdbID;
 
-				return(
-				React.createElement("div", {className: "container"}, 
-				React.createElement("div", {className: "jumbotron", id: "jumbo"}, 
-				
-				React.createElement("h2", null, React.createElement("center", null, " ", this.props.arr.Title)), 
-				
+		return(
+			React.createElement("div", {className: "container"}, 
+			React.createElement("div", {className: "jumbotron", id: "jumbo"}, 
 			
-				React.createElement("hr", null), 
-
-				React.createElement("div", {className: "row", id: "body"}, 
-				React.createElement("div", {className: "col-lg-4"}, 
-				React.createElement("img", {src: this.props.arr.Poster, height: "75%", width: "75%", alt: "image", id: "imag"})
-				), 
-				React.createElement("div", {className: "col-lg-8"}, 
-				
-				React.createElement("h3", null, " Year:", this.props.arr.Year), 
-				React.createElement("h3", null, " Type:", this.props.arr.Type), 
-				React.createElement("br", null), 
-				
-				React.createElement("a", {className: "btn btn-danger  pull-right", target: "_blank", href: link}, "SEE ON IMDB"), 
-				React.createElement("button", {type: "button", className: "btn btn-primary  pull-left", onClick: this.addfav}, "ADD Favourite")
-				)
-				)
-				)
-				)
-				);
+			React.createElement("h2", null, React.createElement("center", null, " ", this.props.arr.Title)), 
 			
+			
+			React.createElement("hr", null), 
+
+			React.createElement("div", {className: "row", id: "body"}, 
+			React.createElement("div", {className: "col-lg-4"}, 
+			React.createElement("img", {src: this.props.arr.Poster, height: "75%", width: "75%", alt: "image", id: "imag"})
+			), 
+			React.createElement("div", {className: "col-lg-8"}, 
+			
+			React.createElement("h3", null, " Year:", this.props.arr.Year), 
+			React.createElement("h3", null, " Type:", this.props.arr.Type), 
+			React.createElement("br", null), 
+			
+			React.createElement("a", {className: "btn btn-danger  pull-right", target: "_blank", href: link}, "SEE ON IMDB"), 
+			React.createElement("button", {type: "button", className: "btn btn-primary  pull-left", onClick: this.addfav}, "ADD Favourite")
+			)
+			)
+			)
+			)
+			);
+		
 
 		
 
-			return(
+		return(
 			React.createElement("div", null, 
 			mov
 
@@ -26241,42 +26241,90 @@ var ReactDOM = require('react-dom');
 
 
 var Display_saved = React.createClass({displayName: "Display_saved",  
-	 
-getInitialState:function(){
 
-  return {
-    message:this.props.Id_temp
-  };
-},
+	getInitialState:function(){
 
-onformSubmit:function()
-  {
-                                
-  this.props.delhand_ref({message:this.props.arr.imdbID});
-},
+		return {
+			message:this.props.Id_temp,
+			movie_title:this.props.tit_temp,
+			id_mod:"#"+this.props.arr.imdbID,
+			frmID:this.props.arr.imdbID+"frm"
 
+		};
+	},
 
-delfav:function()
-{
+	onDel:function()
+	{
 
-	console.log("hello try9");
-var movieArray=this.props.arr;
-console.log(movieArray);
+		this.props.delhand_ref({message:this.props.arr.imdbID});
+	},
 
-link="http://localhost:8080/users/delmovies?id="+this.props.arr.imdbID;
-$.ajax({
+	onUpdt:function()
+	{
+		
+		this.props.uphand_ref({message:this.props.arr.imdbID},{movie_title:document.getElementById(this.state.frmID).value});	
+	},
 
-url:link,
-type:'DELETE',
-data:movieArray,
+	update_title:function()
+	{
+
+		console.log(this.props.arr.Title);
+		var movieArray=this.props.arr;
+		console.log(movieArray);
+		console.log(this.state.frmID)
+		var mov_title=document.getElementById(this.state.frmID).value;
+		console.log(mov_title);
+		link="http://localhost:8080/users/update?id="+this.props.arr.imdbID+"&title="+mov_title;
+		console.log(link);
+		$.ajax({
+
+			url:link,
+			type:'PUT',
+			data:movieArray,
 			success:function(data){ 
-				 
+
+				console.log("Inside Ajax")
+
+				alert(this.props.arr.Type+" "+this.props.arr.Title+" Title successfully changed to "+mov_title)
+				this.onUpdt()
+
+
+			}.bind(this),
+
+			error: function(err)
+			{
+				console.log("Hello Error")
+				console.log(err)
+			}.bind(this)
+		}); 
+
+
+	},
+
+
+
+
+	delfav:function()
+	{
+
+		console.log("hello try9");
+		var movieArray=this.props.arr;
+		console.log(movieArray);
+
+		link="http://localhost:8080/users/delmovies?id="+this.props.arr.imdbID;
+		$.ajax({
+
+			url:link,
+			type:'DELETE',
+			data:movieArray,
+			success:function(data){ 
+
 				console.log("Hello Success try")
-                
+
 				alert(this.props.arr.Type+" "+this.props.arr.Title+" successfully deleted")
-                this.onformSubmit()
-               
-              
+				this.onDel()
+
+
 			}.bind(this),
 
 			error: function(err)
@@ -26291,42 +26339,76 @@ data:movieArray,
 
 
 
-},
+	},
 
-render: function(){ 
-link="http://www.imdb.com/title/"+this.props.arr.imdbID;
+	render: function(){ 
 
-				return(
-				React.createElement("div", {className: "container"}, 
-				React.createElement("div", {className: "jumbotron", id: "jumbo"}, 
-				
-				React.createElement("h2", null, React.createElement("center", null, " ", this.props.arr.Title)), 
-				
+		link="http://www.imdb.com/title/"+this.props.arr.imdbID;
+		
+		return(
+			React.createElement("div", {className: "container"}, 
+			React.createElement("div", {className: "jumbotron", id: "jumbo"}, 
+
+			React.createElement("h2", null, React.createElement("center", null, " ", this.props.arr.Title)), 
+
 			
-				React.createElement("hr", null), 
+			React.createElement("hr", null), 
 
-				React.createElement("div", {className: "row", id: "body"}, 
-				React.createElement("div", {className: "col-lg-4"}, 
-				React.createElement("img", {src: this.props.arr.Poster, height: "75%", width: "75%", alt: "image", id: "imag"})
-				), 
-				React.createElement("div", {className: "col-lg-8"}, 
-				
-				React.createElement("h3", null, " Year:", this.props.arr.Year), 
-				React.createElement("h3", null, " Type:", this.props.arr.Type), 
-				React.createElement("br", null), 
-				
-				React.createElement("a", {className: "btn btn-danger  pull-right", target: "_blank", href: link}, "SEE ON IMDB"), 
-				React.createElement("button", {type: "button", className: "btn btn-primary  pull-left", onClick: this.delfav}, "Delete")
-				)
-				)
-				)
-				)
-				);
+			React.createElement("div", {className: "row", id: "body"}, 
+			React.createElement("div", {className: "col-lg-4"}, 
+			React.createElement("img", {src: this.props.arr.Poster, height: "75%", width: "75%", alt: "image", id: "imag"})
+			), 
+			React.createElement("div", {className: "col-lg-8"}, 
+
+			React.createElement("h3", null, " Year:", this.props.arr.Year), 
+			React.createElement("h3", null, " Type:", this.props.arr.Type), 
+			React.createElement("br", null), 
+			React.createElement("center", null, 
+			React.createElement("a", {className: "btn btn-danger  pull-right", target: "_blank", href: link}, "SEE ON IMDB"), 
+			React.createElement("button", {type: "button", className: "btn btn-info ", "data-toggle": "modal", "data-target": this.state.id_mod}, "Update Movie"), 
+			React.createElement("button", {type: "button", className: "btn btn-primary  pull-left", onClick: this.delfav}, "Delete")), 
+
+			React.createElement("div", {id: this.props.arr.imdbID, className: "modal fade", role: "dialog"}, 
+			React.createElement("div", {className: "modal-dialog"}, 
+
+
+			React.createElement("div", {className: "modal-content"}, 
+			React.createElement("div", {className: "modal-header"}, 
+			React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal"}, "×"), 
+			React.createElement("h4", {className: "modal-title"}, "Update Movie Title")
+			), 
+
+			React.createElement("div", {className: "modal-body"}, 
 			
+			React.createElement("form", {className: "form-horizontal"}, 
+			React.createElement("div", {className: "form-group"}, 
+			React.createElement("label", {form: "title", className: "control-label col-xs-2"}, "Title"), 
+			React.createElement("div", {className: "col-xs-10"}, 
+			React.createElement("input", {type: "text", className: "form-control", id: this.state.frmID, placeholder: "Movie Title"})
+			)
+			)
+			)
+
+
+			), 
+			React.createElement("div", {className: "modal-footer"}, 
+			React.createElement("button", {type: "button", className: "btn btn-default pull-left ", onClick: this.update_title, "data-dismiss": "modal"}, "Update Movie Name"), 
+			React.createElement("button", {type: "button", className: "btn btn-default pull-right", "data-dismiss": "modal"}, "Cancel")
+			)
+			)
+
+			)
+			)
+			)
+			)
+			)
+			)
+			);
+
 
 		
 
-			return(
+		return(
 			React.createElement("div", null, 
 			mov
 
@@ -26335,39 +26417,40 @@ link="http://www.imdb.com/title/"+this.props.arr.imdbID;
 
 		}
 	});
-module.exports=Display_saved;
+	module.exports=Display_saved;
 },{"react":234,"react-dom":3}],238:[function(require,module,exports){
 var React=require('react');
 
 var {Link}=require('react-router');
 var Display_saved=require('./Display_saved')
 var Favourite=React.createClass({displayName: "Favourite",
-  
 
 
-    
+
+
     getInitialState: function()
     {
         return {
-            
+
             Movie_all:[] ,
-            imdbID:'no'
+            imdbID:'no',
+            title:'title'
 
         };
     }, 
-  
- 
-componentDidMount:function(){
-  
-$.ajax({
 
-url:"http://localhost:8080/users/getmovies",
-type:'GET',
+
+    componentDidMount:function(){
+
+        $.ajax({
+
+            url:"http://localhost:8080/users/getmovies",
+            type:'GET',
 
             success:function(data){ 
-                
-            console.log(data);
-            this.setState({Movie_all:data});
+
+                console.log(data);
+                this.setState({Movie_all:data});
                 
             }.bind(this),
 
@@ -26377,53 +26460,72 @@ type:'GET',
             }.bind(this),
         }) 
 
-},
+    },
 
-delhandler:function(imdbID){
-var j=-1;
-console.log("In Handler");
-console.log(imdbID.message);
-var ID=imdbID.message;
-console.log(ID);
-var temp=this.state.Movie_all;
-var len=temp.length;
-for (var i = 0; i <len; i++) {
-    if(temp[i].imdbID==ID)
+    delhandler:function(imdbID){
+        var j=-1;
+        console.log("In Handler");
+        console.log(imdbID.message);
+        var ID=imdbID.message;
+        console.log(ID);
+        var temp=this.state.Movie_all;
+        var len=temp.length;
+        for (var i = 0; i <len; i++) {
+            if(temp[i].imdbID==ID)
+            {
+                j=i;
+                break;
+            }
+        }
+        if(j>-1)
+        {
+            temp.splice(j,1);
+        }
+        this.setState({Movie_all:temp});
+    },
+
+    uphandler:function(imdbID,title)
     {
-        j=i;
-        break;
+        var j=-1;
+
+        var temp=this.state.Movie_all;
+        var len1=temp.length;
+        console.log(imdbID.message);
+        console.log(title.movie_title)
+        var ID=imdbID.message;
+        console.log(ID);
+        for (var i = 0; i <len1; i++) {
+            if(temp[i].imdbID==ID)
+            {
+                temp[i].Title=title.movie_title;
+                break;
+            }
+        }
+        this.setState({Movie_all:temp});
+
+    },
+
+    render:function(){
+        that=this;
+
+        var temp4=this.state.Movie_all.map(function(arry){
+            return React.createElement(Display_saved, {delhand_ref: that.delhandler, uphand_ref: that.uphandler, Id_temp: that.state.imdbID, tit_temp: that.state.Title, arr: arry})
+        });
+
+
+
+        return(
+
+        React.createElement("div", null, 
+        temp4
+        )
+        )
+
     }
-}
-if(j>-1)
-{
-temp.splice(j,1);
-}
-this.setState({Movie_all:temp});
-},
-
-
-
-render:function(){
-    that=this;
-    
-    var temp4=this.state.Movie_all.map(function(arry){
-    return React.createElement(Display_saved, {delhand_ref: that.delhandler, Id_temp: that.state.imdbID, arr: arry})
-    });
-
-
-
-    return(
-
-    React.createElement("div", null, 
-    temp4
-    )
-    )
-
-}
     
 
 });
-    module.exports=Favourite;
+module.exports=Favourite;
 
 },{"./Display_saved":237,"react":234,"react-router":33}],239:[function(require,module,exports){
 var React=require('react');
@@ -26503,10 +26605,10 @@ var MainComp = React.createClass({displayName: "MainComp",
 
 			)
 
-		}
+	}
 
-	});
-	module.exports=MainComp;
+});
+module.exports=MainComp;
 
 },{"./Box_display":236,"./Movie_display":241,"./Navbar":242,"./Searchbar":243,"react":234,"react-dom":3,"react-router":33}],241:[function(require,module,exports){
 var React=require('react');
@@ -26515,22 +26617,22 @@ var Box_display=require('./Box_display');
 
 var Movie_display=React.createClass({displayName: "Movie_display",
 	
-render:function(){
-	
-	var temp=this.props.a.map(function(arry){
-	return React.createElement(Box_display, {arr: arry})
-	});
+	render:function(){
+		
+		var temp=this.props.a.map(function(arry){
+			return React.createElement(Box_display, {arr: arry})
+		});
 
 
 
-	return(
+		return(
 
-	React.createElement("div", null, 
-	temp
-	)
-	)
+		React.createElement("div", null, 
+		temp
+		)
+		)
 
-}
+	}
 });
 module.exports=Movie_display;
 
@@ -26627,17 +26729,17 @@ var MainComponents=React.createClass({displayName: "MainComponents",
 		}
 	})
 
-		ReactDOM.render(
-                       React.createElement(Router, {history: hashHistory}, 
-                       React.createElement(Route, {path: "/", component: MainComponents}, 
-                       React.createElement(IndexRoute, {path: "/MainComp", component: MainComp}), 
-                       React.createElement(Route, {path: "/MainComp", component: MainComp}), 
-                       React.createElement(Route, {path: "/Favourite", component: Favourite}), 
-                       React.createElement(Route, {path: "/about", component: About})
-                       
-                       )
-      
-),
-		document.getElementById('app'));
+	ReactDOM.render(
+	React.createElement(Router, {history: hashHistory}, 
+	React.createElement(Route, {path: "/", component: MainComponents}, 
+	React.createElement(IndexRoute, {path: "/MainComp", component: MainComp}), 
+	React.createElement(Route, {path: "/MainComp", component: MainComp}), 
+	React.createElement(Route, {path: "/Favourite", component: Favourite}), 
+	React.createElement(Route, {path: "/about", component: About})
+	
+	)
+	
+	),
+	document.getElementById('app'));
 
 },{"./Components/About":235,"./Components/Favourite":238,"./Components/Home":239,"./Components/MainComp":240,"./Components/Navbar":242,"react":234,"react-dom":3,"react-router":33}]},{},[244]);
